@@ -1,2 +1,52 @@
-# terraform-azure-invoice-sections
-Terraform Module to manage Azure invoice sections. Create invoice sections to organize costs of multiples subscriptions directly in the invoice (per application, team, environment, etc.). Supports MCA and MCA-E billing accounts with direct billing.
+# Invoice Sections Terraform module for Microsoft Azure
+
+Terraform Module to manage Azure invoice sections.
+Create invoice sections to organize costs of multiples subscriptions directly in the invoice (per application, team, environment, etc.).
+
+Supports MCA and MCA-E billing accounts with direct billing.
+
+## Usage
+
+## Requirements
+
+## Common errors
+
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.8 |
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | ~> 2.10 |
+
+## Providers
+
+| Name | Version |
+| ---- | ------- |
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 2.10 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+| ---- | ---- |
+| [azapi_resource.this](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_billing_account_id"></a> [billing\_account\_id](#input\_billing\_account\_id) | Id of the MCA billing account.<br/><br/>  Id can be found via the Azure Portal (portal.azure.com) via "Cost Management + Billing > Billing scopes > Select your MCA > Settings > Properties > Billing account id".<br/><br/>  Examples:<br/><br/>  - `00000000-0000-5000-3000-000000000000:00000000-0000-4000-0000-000000000000_2019-05-31` | `string` | n/a | yes |
+| <a name="input_billing_profile_id"></a> [billing\_profile\_id](#input\_billing\_profile\_id) | Id of the billing profile attached to `var.billing_account_id`.<br/><br/>  Id can be found via the Azure Portal (portal.azure.com) via "Cost Management + Billing > Billing scopes > Select your MCA > Billing > Billing profiles > Select your Billing profile > Settings > Properties > Billing profile ID".<br/><br/>  Examples:<br/><br/>  - `0000-0000-000-000`<br/>  - `00000000-0000-4000-0000-000000000000` | `string` | n/a | yes |
+| <a name="input_sections"></a> [sections](#input\_sections) | Map of invoice sections:<br/>  - `name` Name of the invoice section<br/><br/>  Examples:<pre>hcl<br/>  {<br/>    it_platform_alz = {<br/>      name = "86-3133-it-platform-alz"<br/>    }<br/>    hr_lms_license = {<br/>      name = "02-520-hr-lsm-license"<br/>    }<br/>    hr_lms = {<br/>      name = "02-3133-hr-lms"<br/>    }<br/>  }</pre> | <pre>map(object({<br/>    name         = string<br/>    display_name = optional(string)<br/>    status       = optional(string)<br/>    tags         = optional(map(string))<br/>  }))</pre> | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+| ---- | ----------- |
+| <a name="output_invoice_sections"></a> [invoice\_sections](#output\_invoice\_sections) | Informations about the invoice sections created in the module.<br/><br/>  The map value contains the following attributes:<br/>  - `name` - Name<br/>  - `display_name` - Display Name<br/>  - `tags` - Map of Tags<br/>  - `id` - The unique Id<br/>  - `resource_id` - The full id, including billing account and billing profile<br/>  - `resource` - The full azapi\_resource |
+<!-- END_TF_DOCS -->
