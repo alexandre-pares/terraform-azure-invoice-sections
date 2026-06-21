@@ -16,7 +16,8 @@ For the later part I recommend to use [the AVM for Subscription Vending](https:/
 
 ```hcl
 module "invoice_section" {
-  source = "../.."
+  source  = "alexandre-pares/invoice-sections/azure"
+  version = "1.0.0"
 
   billing_account_id = var.billing_account_id
   billing_profile_id = var.billing_profile_id
