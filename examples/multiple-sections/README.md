@@ -1,8 +1,8 @@
-# Create a single invoice section with custom display name and tags
+# Create multiple invoice sections
 
-This example creates a single invoice section with a custom display name a a set of tags.
+This example creates multiple invoice sections.
 
-![Single Invoice Section with Tags](../../assets/single-section-with-tags.png)
+![Multiple Invoice Sections](../../assets/multiple-sections.png)
 
 ## Usage
 
@@ -27,24 +27,35 @@ terraform apply
 ## Main code
 
 ```hcl
-module "invoice_section" {
+locals {
+  sections = {
+    it_platform_alz = {
+      name         = "86-3133-it-platform-alz"
+      display_name = "IT Platform Azure Landing Zone"
+      tags = {
+        department  = "it"
+        team        = "platform"
+        cost_center = "86-3133"
+      }
+    }
+    hr_lms_license = {
+      name = "02-520-hr-lms-license"
+    }
+    hr_lms = {
+      name = "02-3133-hr-lms"
+    }
+  }
+}
+
+
+module "invoice_sections" {
   source  = "alexandre-pares/invoice-sections/azure"
   version = "1.0.1"
 
   billing_account_id = var.billing_account_id
   billing_profile_id = var.billing_profile_id
 
-  sections = {
-    it-devops-sandbox = {
-      name         = "it-devops-sandbox"
-      display_name = "IT DevOps Sandbox"
-      tags = {
-        department  = "it"
-        team        = "devops"
-        cost_center = "86-3133"
-      }
-    }
-  }
+  sections = local.sections
 }
 ```
 
@@ -71,7 +82,7 @@ No providers.
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| <a name="module_invoice_section"></a> [invoice\_section](#module\_invoice\_section) | ../.. | n/a |
+| <a name="module_invoice_sections"></a> [invoice\_sections](#module\_invoice\_sections) | ../.. | n/a |
 
 ## Resources
 

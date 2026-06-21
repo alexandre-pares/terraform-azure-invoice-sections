@@ -18,7 +18,7 @@ output "invoice_sections" {
     k => {
       name         = v.name
       display_name = v.body.properties.displayName
-      tags         = v.output.tags
+      tags         = try(v.output.tags, null)
       id           = v.output.properties.systemId
       resource_id  = v.id
       resource     = v

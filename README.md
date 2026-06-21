@@ -17,7 +17,7 @@ For the later part I recommend to use [the AVM for Subscription Vending](https:/
 ```hcl
 module "invoice_section" {
   source  = "alexandre-pares/invoice-sections/azure"
-  version = "1.0.0"
+  version = "1.0.1"
 
   billing_account_id = var.billing_account_id
   billing_profile_id = var.billing_profile_id
@@ -45,10 +45,35 @@ module.invoice_section.invoice_sections["it-devops-sandbox"].resource_id
 
 ## Requirements
 
+Write access over one of the following resource:
 
+- Billing account
+- Billing profile
+
+Learn more: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/understand-mca-roles#manage-invoice-sections-for-billing-profile
 
 ## Common errors
 
+### Resource already exists
+
+```bash
+╷
+│ Error: Resource already exists
+│
+│   with module.invoice_sections.azapi_resource.this["hr_lms"],
+│   on ../../main.tf line 3, in resource "azapi_resource" "this":
+│    3: resource "azapi_resource" "this" {
+│
+│ a resource with the ID
+│ "/providers/Microsoft.Billing/billingAccounts/00000000-0000-5000-3000-000000000000:00000000-0000-4000-0000-000000000000_2019-05-31/billingProfiles/0000-0000-000-000/invoiceSections/02-3133-hr-lms"
+│ already exists - to be managed via Terraform this resource needs to be imported into the State. Please
+│ see the resource documentation for "azapi_resource" for more information
+╵
+```
+
+This can happen if you try to use an invoice section name that was previouly deleted. Deleted invoice sections are still queriable and will return `state` to `Deleted`.
+
+To fix this issue you will need to change the name of your new invoice section
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -80,7 +105,7 @@ No modules.
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_billing_account_id"></a> [billing\_account\_id](#input\_billing\_account\_id) | Id of the MCA billing account.<br/><br/>  Id can be found via the Azure Portal (portal.azure.com) via "Cost Management + Billing > Billing scopes > Select your MCA > Settings > Properties > Billing account id".<br/><br/>  Examples:<br/><br/>  - `00000000-0000-5000-3000-000000000000:00000000-0000-4000-0000-000000000000_2019-05-31` | `string` | n/a | yes |
 | <a name="input_billing_profile_id"></a> [billing\_profile\_id](#input\_billing\_profile\_id) | Id of the billing profile attached to `var.billing_account_id`.<br/><br/>  Id can be found via the Azure Portal (portal.azure.com) via "Cost Management + Billing > Billing scopes > Select your MCA > Billing > Billing profiles > Select your Billing profile > Settings > Properties > Billing profile ID".<br/><br/>  Examples:<br/><br/>  - `0000-0000-000-000`<br/>  - `00000000-0000-4000-0000-000000000000` | `string` | n/a | yes |
-| <a name="input_sections"></a> [sections](#input\_sections) | Map of invoice sections:<br/><br/>  - `name` - Name of the invoice section<br/>  - `display Name` - (Optional) Display name of Invoice Section<br/>  - `tags` - (Optional) Map of Tags<br/><br/>  Examples:<pre>hcl<br/>  {<br/>    it_platform_alz = {<br/>      name = "86-3133-it-platform-alz"<br/>    }<br/>    hr_lms_license = {<br/>      name = "02-520-hr-lsm-license"<br/>    }<br/>    hr_lms = {<br/>      name = "02-3133-hr-lms"<br/>    }<br/>  }</pre> | <pre>map(object({<br/>    name         = string<br/>    display_name = optional(string)<br/>    tags         = optional(map(string))<br/>  }))</pre> | n/a | yes |
+| <a name="input_sections"></a> [sections](#input\_sections) | Map of invoice sections:<br/><br/>  - `name`          - Name of the Invoice Section<br/>  - `display Name`  - (Optional) Display name of the Invoice Section<br/>  - `tags`          - (Optional) Map of Tags<br/><br/>  Examples:<pre>hcl<br/>  {<br/>    it_platform_alz = {<br/>      name = "86-3133-it-platform-alz"<br/>    }<br/>    hr_lms_license = {<br/>      name = "02-520-hr-lms-license"<br/>    }<br/>    hr_lms = {<br/>      name = "02-3133-hr-lms"<br/>    }<br/>  }</pre> | <pre>map(object({<br/>    name         = string<br/>    display_name = optional(string)<br/>    tags         = optional(map(string))<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
 
