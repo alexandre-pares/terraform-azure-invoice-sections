@@ -5,9 +5,46 @@ Create invoice sections to organize costs of multiples subscriptions directly in
 
 Supports MCA and MCA-E billing accounts with direct billing.
 
+Learn more: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/mca-section-invoice
+
 ## Usage
 
+You should first create the invoice sections with the current module and then create or attach the subscription to it.
+For the later part I recommend to use [the AVM for Subscription Vending](https://github.com/Azure/terraform-azure-avm-ptn-alz-sub-vending) and set the parameter [`subscription_billing_scope`](https://github.com/Azure/terraform-azure-avm-ptn-alz-sub-vending#-subscription_billing_scope) to the invoice section resource id.
+
+### Create a single invoice section
+
+```hcl
+module "invoice_section" {
+  source = "../.."
+
+  billing_account_id = var.billing_account_id
+  billing_profile_id = var.billing_profile_id
+
+  sections = {
+    it-devops-sandbox = {
+      name         = "it-devops-sandbox"
+      display_name = "IT DevOps Sandbox"
+      tags = {
+        department  = "it"
+        team        = "devops"
+        cost_center = "86-3133"
+      }
+    }
+  }
+}
+```
+
+You can the retrieve the invoice section resource id from the module's outputs:
+
+```bash
+# Invoice section resource_id (e.g. `/providers/Microsoft.Billing/billingAccounts/00000000-0000-5000-3000-000000000000:00000000-0000-4000-0000-000000000000_2019-05-31/BillingProfiles/0000-0000-000-000/invoiceSections/it-devops-sandbox`)
+module.invoice_section.invoice_sections["it-devops-sandbox"].resource_id
+```
+
 ## Requirements
+
+
 
 ## Common errors
 

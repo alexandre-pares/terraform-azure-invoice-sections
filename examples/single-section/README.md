@@ -28,7 +28,8 @@ terraform apply
 
 ```hcl
 module "invoice_section" {
-  source = "../.."
+  source  = "alexandre-pares/invoice-sections/azure"
+  version = "1.0.0"
 
   billing_account_id = var.billing_account_id
   billing_profile_id = var.billing_profile_id
@@ -49,9 +50,9 @@ module "invoice_section" {
 
 You can then retrieve the invoice section id from Terraform module's output:
 
-```
-# Invoice section Id
-module.invoice_section.invoice_sections.id
+```bash
+# Invoice section Id (e.g. `00000000-0000-4000-0000-000000000000`)
+module.invoice_section.invoice_sections["it-devops-sandbox"].id
 ```
 
 <!-- BEGIN_TF_DOCS -->
