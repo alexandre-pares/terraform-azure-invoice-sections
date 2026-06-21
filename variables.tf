@@ -34,7 +34,10 @@ variable "billing_profile_id" {
 variable "sections" {
   description = <<DESCRIPTION
   Map of invoice sections:
-  - `name` Name of the invoice section
+
+  - `name` - Name of the invoice section
+  - `display Name` - (Optional) Display name of Invoice Section
+  - `tags` - (Optional) Map of Tags
 
   Examples:
 
@@ -57,7 +60,6 @@ variable "sections" {
   type = map(object({
     name         = string
     display_name = optional(string)
-    status       = optional(string)
     tags         = optional(map(string))
   }))
 
