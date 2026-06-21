@@ -10,7 +10,6 @@ resource "azapi_resource" "this" {
   body = {
     properties = {
       displayName = coalesce(each.value.display_name, each.value.name)
-      state       = coalesce(each.value.state, "Active")
     }
     tags = try(each.value.tags, null)
   }
