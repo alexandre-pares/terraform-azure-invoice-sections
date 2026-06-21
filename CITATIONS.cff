@@ -10,7 +10,7 @@ authors:
     family-names: PARÈS
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.20584701
+    value: 10.5281/zenodo.20787703
 repository-code: >-
   https://github.com/alexandre-pares/terraform-azure-finops-focus-billing-export
 repository-artifact: >-
